@@ -30,6 +30,7 @@ for movil in moviles :
 			}
 		}
 	}
+	print"frase : " + str(frases[int(jobj["frase"])])
 	jobj["frase"] = (int(jobj["frase"]) + 1) % len(frases)
 	r = requests.post(url, data = json.dumps(data), headers = header)
 	print "-------------------------------"
@@ -43,4 +44,8 @@ for movil in aux :
 	linea = json.dumps(movil) + "\n"
 	fich.write(linea)
 
+fich.close()
+
+fich = open("/var/mail/waxa","w")
+fich.write("")
 fich.close()
