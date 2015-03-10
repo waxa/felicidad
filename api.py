@@ -26,16 +26,22 @@ class guardarId:
 		jobj = json.loads(web.data())
 		existe = False
 		for movil in moviles :
-			if movil["id"] == jobj["id"] :
+			jobj2 = json.loads(movil)
+			if jobj2["id"] == jobj["id"] :
 				existe = True
 				break;
 
 		aux = []
 		for movil in moviles :
-			if not movil["id"] == jobj["id"] :
-				aux.append(movil)
+			jobj2 = json.loads(movil)
+			if not jobj2["id"] == jobj["id"] :
+				aux.append(jobj2)
 
+		if existe : 
+			print "exite"
+		
 		if not existe :
+			print "no existe"
 			aux.append({"id":jobj["id"], "frase": 0})
 
 		fich = open("ids.txt","w")

@@ -7,33 +7,39 @@ import requests
 import httplib
 
 url = "https://android.googleapis.com/gcm/send"
-header = {"Authorization": str("key=" + servKey.autho), 
-	"Content-Type" : "application/json", 
-	"Accept-Encoding" : "application/json" }
+header = {"Authorization": "key=" + servKey.autho, "Content-Type" : "application/json", "Accept-Encoding" : "application/json" }
 
-fich = open("ids.txt","r")
+fich = open("/home/waxa/felicidad/ids.txt","r")
 moviles = fich.readlines()
 fich.close()
 
-fich = open("frases.txt","r")
+fich = open("/home/waxa/felicidad/frases.txt","r")
 frases = fich.readlines()
 fich.close()
 
+aux = []
 for movil in moviles :
+	jobj = json.loads(movil)
+	idMovil = []
+	idMovil.append(str(jobj["id"]))
 	data = { 
-		"registration_ids" : str(movil["id"]),
+		"registration_ids" : idMovil,
 		"data" : {
 			"mensaje" : {
-				"tipo" : str("frase"),
-				"mensaje" : str(frases[int(movil["frase"])])
+				"frase" : str(frases[int(jobj["frase"])])
 			}
 		}
 	}
-	movil["frase"] = (int(movil["frase"]) + 1) % len(frases)
-	r = requests.post(url, json.dumps(data), header)
+	jobj["frase"] = (int(jobj["frase"]) + 1) % len(frases)
+	r = requests.post(url, data = json.dumps(data), headers = header)
+	print "-------------------------------"
+	print "peticion enviada"
+	print r.text
+	print "-------------------------------"
+	aux.append(jobj)
 
-fich = open ("ids.txt","w")
-for movil in moviles :
+fich = open ("/home/waxa/felicidad/ids.txt","w")
+for movil in aux :
 	linea = json.dumps(movil) + "\n"
 	fich.write(linea)
 
