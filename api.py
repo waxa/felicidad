@@ -24,12 +24,20 @@ app = web.application(urls, globals())
 class guardarId:
 	def POST(self):
 		jobj = json.loads(web.data())
+		existe = False
+		for movil in moviles :
+			if movil["id"] == jobj["id"] :
+				existe = True
+				break;
+
 		aux = []
 		for movil in moviles :
 			if not movil["id"] == jobj["id"] :
 				aux.append(movil)
 
-		aux.append({"id":jobj["id"]})
+		if not existe :
+			aux.append({"id":jobj["id"], "frase": 0})
+
 		fich = open("ids.txt","w")
 		for movil in aux :
 			linea = json.dumps(movil) + "\n"
